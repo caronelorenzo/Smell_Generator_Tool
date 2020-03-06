@@ -8,7 +8,8 @@ public class RowReportCompleto extends RowReportSmell {
     private String sha1;
 
     public RowReportCompleto(String smellType, String className, String packageString, String sha1) {
-        super(smellType, className, packageString);
+        //Ho sostituito packageString con className invertendone l'ordine
+        super(smellType, packageString, className);
         this.sha1 = sha1;
     }
 

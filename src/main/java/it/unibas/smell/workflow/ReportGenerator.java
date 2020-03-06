@@ -31,6 +31,7 @@ public class ReportGenerator {
             makeExportFolder(directory.toString());
             String folderPathExport = directory.getPath() + "/Export";
             generaReportCompleto(folderPathValidated + reportName, projectDir, tag, folderPathExport, version.replace(".", "-"));
+            break;
         }
     }
 
