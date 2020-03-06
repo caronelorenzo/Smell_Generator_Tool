@@ -68,8 +68,10 @@ public class TestSmell extends TestCase {
     @Test
     public void testGeneraReportAnt() throws Exception {
         List<String> tag = Arrays.asList("ANT_11", "ANT_12", "ANT_13", "ANT_14", "ANT_141", "ANT_151_FINAL", "ANT_152_FINAL", "ANT_153", "ANT_154", "ANT_15_FINAL", "ANT_160", "ANT_161", "ANT_162", "ANT_163", "ANT_164", "ANT_165", "ANT_170", "ANT_171", "ANT_180", "ANT_181");
-        String projectDir = "/Users/lorenzocarone/Dropbox (Personal)/TESI/Progetti Tesi/ant";
-        String folderPathProjectDataset = "/Users/lorenzocarone/Dropbox (Personal)/TESI/dataset/apache-ant-data/";
+        //String projectDir = "/Users/lorenzocarone/Dropbox (Personal)/TESI/Progetti Tesi/ant";
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant";
+        //String folderPathProjectDataset = "/Users/lorenzocarone/Dropbox (Personal)/TESI/dataset/apache-ant-data/";
+        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
 
