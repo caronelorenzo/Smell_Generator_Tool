@@ -37,19 +37,6 @@ public class DAOCsv {
         }
     }
 
-//    public static <T> List<T> leggiCSV(Class<T> t, String filePath) throws DAOException {
-//        try {
-//            Path path = Paths.get(filePath);
-//            return new CsvToBeanBuilder(new FileReader(path.toFile()))
-//                    .withSeparator(';')
-//                    .withType(t)
-//                    .build().parse();
-//        } catch (FileNotFoundException ex) {
-//            throw new DAOException("Impossibile leggere il file " + filePath);
-//        }
-//    }
-
-
     public static <T> void scriviCSVGenerico(String filename, List<T> righe) throws DAOException {
         Writer writer = null;
         ICSVWriter csvWriter = null;

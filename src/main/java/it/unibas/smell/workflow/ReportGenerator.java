@@ -21,9 +21,23 @@ import java.util.stream.Collectors;
 
 public class ReportGenerator {
 
-    public static void generaReportCompleto(String pathReportSmell, String projectDir, List<String> tag, String folderPathReportCompleto, String prefix) throws Exception {
+    public static void generaReportCompletoPerVersione(String projectDir, List<String> tag, String folderPathProjectDataset) throws Exception {
+        File[] directories = new File(folderPathProjectDataset).listFiles(File::isDirectory);
+        for (File directory : directories) {
+            String version = directory.getName();
+            String folderPathValidated = directory.getPath().toString() + "/Validated/";
+            String reportName = "Report_" + version + ".csv";
+            generaReportSmell(folderPathValidated, reportName);
+            makeExportFolder(directory.toString());
+            String folderPathExport = directory.getPath() + "/Export";
+            generaReportCompleto(folderPathValidated + reportName, projectDir, tag, folderPathExport, version.replace(".", "-"));
+        }
+    }
+
+    public static void generaReportCompleto(String pathReportSmell, String projectDir, List<String> tag, String folderPathExport, String prefix) throws Exception {
         List<RowReportCompleto> reportCompleto = null;
         List<RowReportSmell> reportSmell = DAOCsv.leggiCSV(RowReportSmell.class, pathReportSmell);
+        //makeExportFolder(pathReportSmell);
         for (int i = 0; i < tag.size() - 1; i++) {
             reportCompleto = new ArrayList<>();
             String tagFrom = tag.get(i);
@@ -41,10 +55,21 @@ public class ReportGenerator {
                 reportCompleto.add(rowReportCompleto);
             }
             String reportName = MessageFormat.format("{0}_{1}-{2}.csv", prefix, tagFrom, tagTo);
-            Path pathReportCompleto = Paths.get(folderPathReportCompleto, reportName);
+            Path pathReportCompleto = Paths.get(folderPathExport, reportName);
             DAOCsv.scriviCSVGenerico(pathReportCompleto.toString(), reportCompleto);
         }
 
+    }
+
+    private static void makeExportFolder(String datasetSource) {
+        String newFolderPath = datasetSource + "/Export";
+        File file = new File(newFolderPath);
+        boolean bool = file.mkdir();
+        if (bool) {
+            System.out.println("Directory created successfully: " + newFolderPath);
+        } else {
+            System.out.println("Sorry couldn’t create specified directory");
+        }
     }
 
     private static String packageToPath(String packageString) {
@@ -52,9 +77,9 @@ public class ReportGenerator {
         return replace;
     }
 
-    public static void generaReportSmell(String folderPath, String reportName) {
+    public static void generaReportSmell(String folderPathValidated, String reportName) {
         ReportSmell reportSmell = new ReportSmell();
-        List<File> fileList = getFolderFilesList(folderPath);
+        List<File> fileList = getFolderFilesList(folderPathValidated);
         try {
             for (File file : fileList) {
                 boolean b = Costanti.fileNameClassi.containsKey(file.getName());
@@ -64,7 +89,7 @@ public class ReportGenerator {
                     smellRow.forEach(reportSmell::addSmellRow);
                 }
             }
-            Path pathReport = Paths.get(folderPath, reportName);
+            Path pathReport = Paths.get(folderPathValidated, reportName);
             DAOCsv.scriviCSVGenerico(pathReport.toString(), reportSmell.getReport());
         } catch (DAOException ex) {
             ex.printStackTrace();
