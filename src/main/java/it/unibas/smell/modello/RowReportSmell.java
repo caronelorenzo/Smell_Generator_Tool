@@ -2,6 +2,8 @@ package it.unibas.smell.modello;
 
 import com.opencsv.bean.CsvBindByName;
 
+import java.util.Objects;
+
 public class RowReportSmell {
 
     @CsvBindByName(column = "SMELL TYPE")
@@ -53,6 +55,20 @@ public class RowReportSmell {
                 ", className='" + className + '\'' +
                 ", packageString='" + packageString + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RowReportSmell that = (RowReportSmell) o;
+        return Objects.equals(className, that.className) &&
+                Objects.equals(packageString, that.packageString);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(className, packageString);
     }
 }
 

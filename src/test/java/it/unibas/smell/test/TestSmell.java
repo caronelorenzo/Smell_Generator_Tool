@@ -2,11 +2,13 @@ package it.unibas.smell.test;
 
 import it.unibas.smell.controllo.GitCommand;
 import it.unibas.smell.controllo.Utility;
+import it.unibas.smell.modello.RowReportSmell;
 import it.unibas.smell.modello.smellType.*;
 import it.unibas.smell.persistence.DAOCsv;
 import it.unibas.smell.persistence.DAOException;
 import it.unibas.smell.workflow.ReportGenerator;
 import junit.framework.TestCase;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +34,6 @@ public class TestSmell extends TestCase {
     }
 
     @Test
-    public void testReadAndWrite() {
-        ReportGenerator.generaReportSmell(folderPath, "Report_1.csv");
-    }
-
-    @Test
     public void testCommand() throws Exception {
         String log = GitCommand.log("ANT_12", "ANT_13", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Desktop/ant/");
         List<String> strings = Utility.matchSHA1(log);
@@ -50,9 +47,10 @@ public class TestSmell extends TestCase {
 
     @Test
     public void testGeneraReportSmell() {
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant";
         String datasetSource = "/Users/lorenzocarone/Dropbox (Personal)/TESI/dataset/apache-ant-data/apache_1.2/Validated";
-        String reportName = "apache_1.2";
-        ReportGenerator.generaReportSmell(datasetSource, reportName);
+        String reportName = "apache_1.2.csv";
+        ReportGenerator.generaReportSmell(datasetSource, reportName,projectDir);
     }
 
     @Test
@@ -74,5 +72,20 @@ public class TestSmell extends TestCase {
         String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
+
+    @Test
+    public void testRecuperoCartelle() throws IOException {
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant";
+        File dir = new File(projectDir);
+        String[] extensions = new String[] { "java" };
+        System.out.println("Getting all .java files in " + dir.getCanonicalPath()
+                + " including those in subdirectories");
+        List<File> files = (List<File>) FileUtils.listFiles(dir, extensions, true);
+        List<RowReportSmell> listaCompletaClassi = ReportGenerator.createRowComplete(files);
+        for (RowReportSmell rowReportSmell : listaCompletaClassi) {
+            System.out.println(rowReportSmell.toString());
+        }
+    }
+
 
 }

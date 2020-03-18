@@ -8,6 +8,7 @@ import it.unibas.smell.modello.RowReportSmell;
 import it.unibas.smell.modello.smellType.SmellType;
 import it.unibas.smell.persistence.DAOCsv;
 import it.unibas.smell.persistence.DAOException;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,11 +28,10 @@ public class ReportGenerator {
             String version = directory.getName();
             String folderPathValidated = directory.getPath().toString() + "/Validated/";
             String reportName = "Report_" + version + ".csv";
-            generaReportSmell(folderPathValidated, reportName);
+            generaReportSmell(folderPathValidated, reportName, projectDir);
             makeExportFolder(directory.toString());
             String folderPathExport = directory.getPath() + "/Export";
             generaReportCompleto(folderPathValidated + reportName, projectDir, tag, folderPathExport, version.replace(".", "-"));
-            break;
         }
     }
 
@@ -78,7 +78,25 @@ public class ReportGenerator {
         return replace;
     }
 
-    public static void generaReportSmell(String folderPathValidated, String reportName) {
+    private static String pathToPackage(String pathString) {
+        String replace = pathString.replace("/", ".");
+        return replace;
+    }
+
+    public static void generaReportSmell(String folderPathValidated, String reportName, String allProjectFolderPath) {
+        try {
+            List<File> allProjectFiles = getAllProjectFiles(allProjectFolderPath);
+            List<RowReportSmell> rowComplete = createRowComplete(allProjectFiles);
+            ReportSmell reportSmell = generaReportSmell(folderPathValidated);
+            reportSmell.addNonSmellyRow(rowComplete);
+            Path pathReport = Paths.get(folderPathValidated, reportName);
+            DAOCsv.scriviCSVGenerico(pathReport.toString(), reportSmell.getReport());
+        } catch (DAOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static ReportSmell generaReportSmell(String folderPathValidated) {
         ReportSmell reportSmell = new ReportSmell();
         List<File> fileList = getFolderFilesList(folderPathValidated);
         try {
@@ -90,11 +108,37 @@ public class ReportGenerator {
                     smellRow.forEach(reportSmell::addSmellRow);
                 }
             }
-            Path pathReport = Paths.get(folderPathValidated, reportName);
-            DAOCsv.scriviCSVGenerico(pathReport.toString(), reportSmell.getReport());
         } catch (DAOException ex) {
             ex.printStackTrace();
         }
+        return reportSmell;
+    }
+
+    public static List<File> getAllProjectFiles(String projectDir) {
+        File dir = new File(projectDir);
+        String[] extensions = new String[] { "java" };
+        List<File> files = (List<File>) FileUtils.listFiles(dir, extensions, true);
+        return files;
+    }
+
+    public static List<RowReportSmell> createRowComplete(List<File> files) {
+        List<RowReportSmell> list = new ArrayList<>();
+        for (File file : files) {
+            String className = file.getName();
+            String packageName = getPackageString(file).replace("/" + className, "");
+            String pathNameConvert = ReportGenerator.pathToPackage(packageName);
+            RowReportSmell rowReportSmell = new RowReportSmell();
+            rowReportSmell.setClassName(className);
+            rowReportSmell.setPackageString(pathNameConvert);
+            list.add(rowReportSmell);
+        }
+        return list;
+    }
+
+    public static String getPackageString(File file) {
+        int indexOrg = file.toString().indexOf("org");
+        String packageString = file.toString().substring(indexOrg);
+        return packageString;
     }
 
     public static List<File> getFolderFilesList(String folderPath) {

@@ -35,4 +35,13 @@ public class ReportSmell {
         }
     }
 
+    public void addNonSmellyRow(List<RowReportSmell> rowReportSmellList) {
+        for (RowReportSmell rowReportSmell : rowReportSmellList) {
+            if (report.contains(rowReportSmell)) {
+                continue;
+            }
+            report.add(rowReportSmell);
+        }
+    }
+
 }
