@@ -6,11 +6,11 @@ import java.util.Objects;
 
 public class RowReportSmell {
 
-    @CsvBindByName(column = "SMELL TYPE")
+    @CsvBindByName(column = "SMELL TYPES")
     private String smellType;
 
     @CsvBindByName(column = "CLASS NAME")
-    private String className;
+    private String classString;
 
     @CsvBindByName(column = "PACKAGE")
     private String packageString;
@@ -18,9 +18,9 @@ public class RowReportSmell {
     public RowReportSmell() {
     }
 
-    public RowReportSmell(String smellType, String className, String packageString) {
+    public RowReportSmell(String smellType, String classString, String packageString) {
         this.smellType = smellType;
-        this.className = className;
+        this.classString = classString;
         this.packageString = packageString;
     }
 
@@ -32,12 +32,12 @@ public class RowReportSmell {
         this.smellType = smellType;
     }
 
-    public String getClassName() {
-        return className;
+    public String getClassString() {
+        return classString;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setClassString(String classString) {
+        this.classString = classString;
     }
 
     public String getPackageString() {
@@ -52,7 +52,7 @@ public class RowReportSmell {
     public String toString() {
         return "RowReportSmell{" +
                 "smellType='" + smellType + '\'' +
-                ", className='" + className + '\'' +
+                ", className='" + classString + '\'' +
                 ", packageString='" + packageString + '\'' +
                 '}';
     }
@@ -62,13 +62,13 @@ public class RowReportSmell {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RowReportSmell that = (RowReportSmell) o;
-        return Objects.equals(className, that.className) &&
+        return Objects.equals(classString, that.classString) &&
                 Objects.equals(packageString, that.packageString);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(className, packageString);
+        return Objects.hash(classString, packageString);
     }
 }
 

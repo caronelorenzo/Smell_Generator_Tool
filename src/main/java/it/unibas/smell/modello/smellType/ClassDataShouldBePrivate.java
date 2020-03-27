@@ -43,4 +43,5 @@ public class ClassDataShouldBePrivate implements SmellType{
     public void setPackageString(String packageString) {
         this.packageString = packageString;
     }
+
 }

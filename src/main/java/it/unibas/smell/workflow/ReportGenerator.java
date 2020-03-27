@@ -1,6 +1,7 @@
 package it.unibas.smell.workflow;
 
 import it.unibas.smell.controllo.GitCommand;
+import it.unibas.smell.controllo.StorePrintStream;
 import it.unibas.smell.controllo.Utility;
 import it.unibas.smell.modello.ReportSmell;
 import it.unibas.smell.modello.RowReportCompleto;
@@ -9,6 +10,7 @@ import it.unibas.smell.modello.smellType.SmellType;
 import it.unibas.smell.persistence.DAOCsv;
 import it.unibas.smell.persistence.DAOException;
 import org.apache.commons.io.FileUtils;
+import uk.ac.wlv.sentistrength.SentiStrength;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,23 +46,50 @@ public class ReportGenerator {
             reportCompleto = new ArrayList<>();
             String tagFrom = tag.get(i);
             String tagTo = tag.get(i + 1);
+            //System.out.println(tagFrom+" "+tagTo);
             for (RowReportSmell rowReportSmell : reportSmell) {
                 String smellType = rowReportSmell.getSmellType();
                 String packageString = rowReportSmell.getPackageString();
-                String className = rowReportSmell.getClassName();
+                String className = rowReportSmell.getClassString();
+                //System.out.println(className);
                 Path classPath = Paths.get("src/main/" + packageToPath(packageString), className);
-
                 String log = GitCommand.log(tagFrom, tagTo, classPath.toString(), projectDir);
-                List<String> sha1List = Utility.matchSHA1(log);
-                String sha1 = String.join(", ", sha1List);
-                RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, sha1);
-                reportCompleto.add(rowReportCompleto);
+                if (!log.isEmpty()) {
+                    //System.out.println("Log: "+log.isEmpty());
+                    //List<String> sha1List = Utility.matchSHA1(log);
+                    List<String> commitList = Arrays.asList(log.trim().split("\n"));
+                    //System.out.println("Size: " + commitList.size());
+                    //int index = 0;
+                    System.setOut(new StorePrintStream(System.out));
+                    for (String commit : commitList) {
+                        //System.out.println("Commit: "+commit);
+                        String sha = Utility.matchSHA1(commit).trim();
+                        //System.out.println(sha);
+                        String message = Utility.getMessage(sha, commit).trim();
+                        //System.out.println(message);
+                        String[] sentiStrenghtOutput = ReportGenerator.getSentiStrenghtOutput(message);
+                        String positivity = sentiStrenghtOutput[0];
+                        String negativity = sentiStrenghtOutput[1];
+                        RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, sha, message, positivity, negativity);
+                        reportCompleto.add(rowReportCompleto);
+                        //index++;
+                    }
+                } else {
+                    RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, "", "", "", "");
+                }
             }
             String reportName = MessageFormat.format("{0}_{1}-{2}.csv", prefix, tagFrom, tagTo);
             Path pathReportCompleto = Paths.get(folderPathExport, reportName);
             DAOCsv.scriviCSVGenerico(pathReportCompleto.toString(), reportCompleto);
         }
 
+    }
+
+    private static String[] getSentiStrenghtOutput(String message) {
+        String ssthInitialisationAndText[] = {"sentidata", "/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/ConfigFiles", "text", message};
+        SentiStrength.main(ssthInitialisationAndText);
+        String s = StorePrintStream.printList.get(StorePrintStream.printList.size()-1);
+        return s.trim().split(" ");
     }
 
     private static void makeExportFolder(String datasetSource) {
@@ -128,7 +158,7 @@ public class ReportGenerator {
             String packageName = getPackageString(file).replace("/" + className, "");
             String pathNameConvert = ReportGenerator.pathToPackage(packageName);
             RowReportSmell rowReportSmell = new RowReportSmell();
-            rowReportSmell.setClassName(className);
+            rowReportSmell.setClassString(className);
             rowReportSmell.setPackageString(pathNameConvert);
             list.add(rowReportSmell);
         }

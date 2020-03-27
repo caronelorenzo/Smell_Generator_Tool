@@ -9,6 +9,10 @@ import java.text.MessageFormat;
 public class GitCommand {
 
     public static String log(String tagFrom, String tagTo, String classPath, String projectDir) throws Exception {
+
+        //Restituisce il messaggio dal commit richiesto con lo SHA
+        //String cmd1 = MessageFormat.format("git show -s --oneline <SHA-ID>")
+
         String cmd = MessageFormat.format( "git log --pretty=oneline {0}...{1} --follow -- {2}", tagFrom, tagTo, classPath);
         File destDir = new File(projectDir);
         return execCommand(cmd, destDir);
@@ -24,7 +28,7 @@ public class GitCommand {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 try {
                     while ((line = reader.readLine()) != null) {
-                        builder.append(line);
+                        builder.append(line+"\n");
                         //System.out.println(line);
                     }
                 } catch (IOException e) {
@@ -41,7 +45,7 @@ public class GitCommand {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 try {
                     while ((line = reader.readLine()) != null) {
-                        builder.append(line);
+                        builder.append(line+"\n");
                         //System.out.println(line);
                     }
                 } catch (IOException e) {
