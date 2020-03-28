@@ -35,13 +35,42 @@ public class ReportGenerator {
             makeExportFolder(directory.toString());
             String folderPathExport = directory.getPath() + "/Export";
             generaReportCompleto(folderPathValidated + reportName, projectDir, tag, folderPathExport, version.replace(".", "-"));
+            //break;
         }
     }
 
+//    public static void generaReportCompleto(String pathReportSmell, String projectDir, List<String> tag, String folderPathExport, String prefix) throws Exception {
+//        List<RowReportCompleto> reportCompleto = null;
+//        List<RowReportSmell> reportSmell = DAOCsv.leggiCSV(RowReportSmell.class, pathReportSmell);
+//        //makeExportFolder(pathReportSmell);
+//        for (int i = 0; i < tag.size() - 1; i++) {
+//            reportCompleto = new ArrayList<>();
+//            String tagFrom = tag.get(i);
+//            String tagTo = tag.get(i + 1);
+//            for (RowReportSmell rowReportSmell : reportSmell) {
+//                String smellType = rowReportSmell.getSmellType();
+//                String packageString = rowReportSmell.getPackageString();
+//                String className = rowReportSmell.getClassString();
+//                Path classPath = Paths.get("src/main/" + packageToPath(packageString), className);
+//                String log = GitCommand.log(tagFrom, tagTo, classPath.toString(), projectDir);
+//                List<String> sha1List = Utility.matchSHA1(log);
+//                String sha1 = String.join(", ", sha1List);
+//                RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, sha1, "", "", "");
+//                reportCompleto.add(rowReportCompleto);
+//            }
+//            String reportName = MessageFormat.format("{0}_{1}-{2}.csv", prefix, tagFrom, tagTo);
+//            Path pathReportCompleto = Paths.get(folderPathExport, reportName);
+//            DAOCsv.scriviCSVGenerico(pathReportCompleto.toString(), reportCompleto);
+//        }
+//    }
+
+
+//  METODO CHE GENERA LO STACKOVERFLOW
     public static void generaReportCompleto(String pathReportSmell, String projectDir, List<String> tag, String folderPathExport, String prefix) throws Exception {
         List<RowReportCompleto> reportCompleto = null;
         List<RowReportSmell> reportSmell = DAOCsv.leggiCSV(RowReportSmell.class, pathReportSmell);
         //makeExportFolder(pathReportSmell);
+        System.setOut(new StorePrintStream(System.out));
         for (int i = 0; i < tag.size() - 1; i++) {
             reportCompleto = new ArrayList<>();
             String tagFrom = tag.get(i);
@@ -58,9 +87,7 @@ public class ReportGenerator {
                     //System.out.println("Log: "+log.isEmpty());
                     //List<String> sha1List = Utility.matchSHA1(log);
                     List<String> commitList = Arrays.asList(log.trim().split("\n"));
-                    //System.out.println("Size: " + commitList.size());
-                    //int index = 0;
-                    System.setOut(new StorePrintStream(System.out));
+                    //
                     for (String commit : commitList) {
                         //System.out.println("Commit: "+commit);
                         String sha = Utility.matchSHA1(commit).trim();
@@ -71,6 +98,7 @@ public class ReportGenerator {
                         String positivity = sentiStrenghtOutput[0];
                         String negativity = sentiStrenghtOutput[1];
                         RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, sha, message, positivity, negativity);
+                        //RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, "", "", "", "");
                         reportCompleto.add(rowReportCompleto);
                         //index++;
                     }

@@ -121,26 +121,26 @@ public class TestSmell extends TestCase {
         }
     }
 
-    @Test
-    public void test2() throws Exception {
-        String log = GitCommand.log("ANT_11", "ANT_181", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant");
-        List<String> commitList = Arrays.asList(log.trim().split("\n"));
-        //int index = 0;
-        System.setOut(new StorePrintStream(System.out));
-        for (String commit : commitList) {
-            String sha = Utility.matchSHA1(commit).trim();
-            String message = Utility.getMessage(sha, commit).trim();
-            logger.debug("Message: "+message);
-            //String message = "trailing love spaces";
-            String ssthInitialisationAndText[] = {"sentidata", "/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/ConfigFiles", "text", message};
-            SentiStrength.main(ssthInitialisationAndText);
-            String s = StorePrintStream.printList.get(StorePrintStream.printList.size()-1);
-            String[] finaleStringa = s.trim().split(" ");
-            logger.debug("Risultato: " + finaleStringa[0]+" "+finaleStringa[1]);
-            logger.debug("\n");
-            //index++;
-        }
-    }
+//    @Test
+//    public void test2() throws Exception {
+//        String log = GitCommand.log("ANT_11", "ANT_181", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant");
+//        List<String> commitList = Arrays.asList(log.trim().split("\n"));
+//        //int index = 0;
+//        System.setOut(new StorePrintStream(System.out));
+//        for (String commit : commitList) {
+//            String sha = Utility.matchSHA1(commit).trim();
+//            String message = Utility.getMessage(sha, commit).trim();
+//            logger.debug("Message: "+message);
+//            //String message = "trailing love spaces";
+//            String ssthInitialisationAndText[] = {"sentidata", "/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/ConfigFiles", "text", message};
+//            SentiStrength.main(ssthInitialisationAndText);
+//            String s = StorePrintStream.printList.get(StorePrintStream.printList.size()-1);
+//            String[] finaleStringa = s.trim().split(" ");
+//            logger.debug("Risultato: " + finaleStringa[0]+" "+finaleStringa[1]);
+//            logger.debug("\n");
+//            //index++;
+//        }
+//    }
 
     @Test
     public void testGeneraReportAnt() throws Exception {
