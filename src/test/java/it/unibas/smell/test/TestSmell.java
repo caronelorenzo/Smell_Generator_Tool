@@ -160,4 +160,14 @@ public class TestSmell extends TestCase {
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
 
+    @Test
+    public void testGeneraReportGenerale() throws Exception {
+        //INSERIRE L'ELENCO DEI TAG PER CUI SI VUOLE EFFETTUARE L'ANALISI
+        List<String> tag = Arrays.asList("release-0.1.0", "release-0.2.0", "release-0.3.0", "release-0.4.0", "release-0.5.0", "release-0.6.0", "release-0.7.0", "release-0.8.0");
+        //INSERIRE LA CARTELLA DEL PROGETTO DA ANALIZZARE
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/pig/src/";
+        //INSERIRE LA CARTELLA DEL DATASET DA CUI PRENDERE I DATI
+        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-pig-data";
+        ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
+    }
 }
