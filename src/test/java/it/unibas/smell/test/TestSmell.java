@@ -108,7 +108,7 @@ public class TestSmell extends TestCase {
         System.setOut(new StorePrintStream(System.out));
         //List<String> listMessages = Arrays.asList("Remove unnecessary use of Project.resolveFile by converting arguments to Files from Strings.", "Only delete the target file when it is in fact a file - don't delete directories.", "delete existing target files before copying, hate this avoids overwriting symlinks and is consistent with Unix's cp(1).", "Some initial work on rmic to make it handle -iiop better (doesn't detect generated files properly) - doesn't quite work ATM.", "Allow data types to appear inside of targets.");
         //List<String> listMessages = Arrays.asList("Remove unnecessary use of Project.resolveFile by converting arguments to Files from Strings.");
-        String s = "Copyright Owner is The Apache Software Foundation";
+        String s = "replace isDirect with !hasArray for correctness";
         //for (String message : listMessages) {
             //String ssthInitialisationAndText[] = {"sentidata", "/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/ConfigFiles", "text", message};
             //SentiStrength.main(ssthInitialisationAndText);
@@ -121,34 +121,42 @@ public class TestSmell extends TestCase {
         }
     }
 
-//    @Test
-//    public void test2() throws Exception {
-//        String log = GitCommand.log("ANT_11", "ANT_181", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant");
-//        List<String> commitList = Arrays.asList(log.trim().split("\n"));
-//        //int index = 0;
-//        System.setOut(new StorePrintStream(System.out));
-//        for (String commit : commitList) {
-//            String sha = Utility.matchSHA1(commit).trim();
-//            String message = Utility.getMessage(sha, commit).trim();
-//            logger.debug("Message: "+message);
-//            //String message = "trailing love spaces";
-//            String ssthInitialisationAndText[] = {"sentidata", "/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/ConfigFiles", "text", message};
-//            SentiStrength.main(ssthInitialisationAndText);
-//            String s = StorePrintStream.printList.get(StorePrintStream.printList.size()-1);
-//            String[] finaleStringa = s.trim().split(" ");
-//            logger.debug("Risultato: " + finaleStringa[0]+" "+finaleStringa[1]);
-//            logger.debug("\n");
-//            //index++;
-//        }
-//    }
+    @Test
+    public void test2() throws Exception {
+        String log = GitCommand.log("ANT_11", "ANT_181", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant");
+        List<String> commitList = Arrays.asList(log.trim().split("\n"));
+        //int index = 0;
+        System.setOut(new StorePrintStream(System.out));
+        for (String commit : commitList) {
+            String sha = Utility.matchSHA1(commit).trim();
+            String message = Utility.getMessage(sha, commit).trim();
+            logger.debug("Message: "+message);
+            //String message = "trailing love spaces";
+            String ssthInitialisationAndText[] = {"sentidata", "/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/ConfigFiles", "text", message};
+            SentiStrength.main(ssthInitialisationAndText);
+            String s = StorePrintStream.printList.get(StorePrintStream.printList.size()-1);
+            String[] finaleStringa = s.trim().split(" ");
+            logger.debug("Risultato: " + finaleStringa[0]+" "+finaleStringa[1]);
+            logger.debug("\n");
+            //index++;
+        }
+    }
 
     @Test
     public void testGeneraReportAnt() throws Exception {
         List<String> tag = Arrays.asList("ANT_11", "ANT_12", "ANT_13", "ANT_14", "ANT_141", "ANT_151_FINAL", "ANT_152_FINAL", "ANT_153", "ANT_154", "ANT_15_FINAL", "ANT_160", "ANT_161", "ANT_162", "ANT_163", "ANT_164", "ANT_165", "ANT_170", "ANT_171", "ANT_180", "ANT_181");
         //String projectDir = "/Users/lorenzocarone/Dropbox (Personal)/TESI/Progetti Tesi/ant";
-        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant";
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant/src/main/";
         //String folderPathProjectDataset = "/Users/lorenzocarone/Dropbox (Personal)/TESI/dataset/apache-ant-data/";
         String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/";
+        ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
+    }
+
+    @Test
+    public void testGeneraReportCassandra() throws Exception {
+        List<String> tag = Arrays.asList("cassandra-0.3.0-final", "cassandra-0.4.0-final", "cassandra-0.5.0", "cassandra-0.6.0", "cassandra-0.7.0", "cassandra-0.7.2", "cassandra-0.7.3", "cassandra-0.8.0", "cassandra-0.8.1", "cassandra-0.8.3", "cassandra-1.0.0", "cassandra-1.1.0");
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/cassandra/src/java/";
+        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-cassandra";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
 

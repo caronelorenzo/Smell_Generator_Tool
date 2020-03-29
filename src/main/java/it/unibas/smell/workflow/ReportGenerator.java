@@ -81,7 +81,8 @@ public class ReportGenerator {
                 String packageString = rowReportSmell.getPackageString();
                 String className = rowReportSmell.getClassString();
                 //System.out.println(className);
-                Path classPath = Paths.get("src/main/" + packageToPath(packageString), className);
+                Path classPath = Paths.get(packageToPath(packageString), className);
+                //Path classPath = Paths.get("src/main/" + packageToPath(packageString), className);
                 String log = GitCommand.log(tagFrom, tagTo, classPath.toString(), projectDir);
                 if (!log.isEmpty()) {
                     //System.out.println("Log: "+log.isEmpty());
