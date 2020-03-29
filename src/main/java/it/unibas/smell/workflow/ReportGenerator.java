@@ -10,6 +10,8 @@ import it.unibas.smell.modello.smellType.SmellType;
 import it.unibas.smell.persistence.DAOCsv;
 import it.unibas.smell.persistence.DAOException;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.wlv.sentistrength.SentiStrength;
 
 import java.io.File;
@@ -24,6 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReportGenerator {
+
+    private static Logger logger = LoggerFactory.getLogger(ReportGenerator.class);
 
     public static void generaReportCompletoPerVersione(String projectDir, List<String> tag, String folderPathProjectDataset) throws Exception {
         File[] directories = new File(folderPathProjectDataset).listFiles(File::isDirectory);
@@ -126,9 +130,11 @@ public class ReportGenerator {
         File file = new File(newFolderPath);
         boolean bool = file.mkdir();
         if (bool) {
-            System.out.println("Directory created successfully: " + newFolderPath);
+            logger.debug("Directory created successfully: " + newFolderPath);
+            //System.out.println("Directory created successfully: " + newFolderPath);
         } else {
-            System.out.println("Sorry couldn’t create specified directory");
+            logger.debug("Sorry couldn’t create specified directory");
+            //System.out.println("Sorry couldn’t create specified directory");
         }
     }
 
