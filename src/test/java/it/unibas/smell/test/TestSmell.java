@@ -4,9 +4,6 @@ import it.unibas.smell.controllo.GitCommand;
 import it.unibas.smell.controllo.StorePrintStream;
 import it.unibas.smell.controllo.Utility;
 import it.unibas.smell.modello.RowReportSmell;
-import it.unibas.smell.modello.smellType.*;
-import it.unibas.smell.persistence.DAOCsv;
-import it.unibas.smell.persistence.DAOException;
 import it.unibas.smell.workflow.ReportGenerator;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
@@ -15,8 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
@@ -39,7 +35,9 @@ public class TestSmell extends TestCase {
 
     @Test
     public void testCommand() throws Exception {
-        String log = GitCommand.log("ANT_11", "ANT_181", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant");
+        String classPath = "src/main/org/apache/tools/tar/TarConstants.java";
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant/";
+        String log = GitCommand.logShaID("ANT_11", "ANT_181", classPath, projectDir);
         System.out.println(log);
         //List<String> strings = Utility.matchSHA1(log);
         //strings.forEach(s -> System.out.println(s));
@@ -48,7 +46,17 @@ public class TestSmell extends TestCase {
     }
 
     @Test
-    public void testParentDir(){
+    public void testLogMessage() throws Exception {
+        String shaID = "cafa34ca0878175f8c8ab1bf7fcfaba70c2b1368";
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant/";
+//      String messageCommit = Utility.getMessageFromShaId(shaID, projectDir);
+//      System.out.println(messageCommit);
+        String messageCommit = GitCommand.logMessage(shaID, projectDir);
+        System.out.println(messageCommit);
+    }
+
+    @Test
+    public void testParentDir() throws IOException {
         System.out.println(new File("/Users/lorenzocarone/Dropbox (Personal)/TESI/dataset/apache-ant-data/apache_1.2/Validated/").getParent());
     }
 
@@ -60,15 +68,15 @@ public class TestSmell extends TestCase {
         ReportGenerator.generaReportSmell(datasetSource, reportName,projectDir);
     }
 
-    @Test
-    public void testGeneraReportCompleto() throws Exception {
-        List<String> tag = Arrays.asList("ANT_11", "ANT_12", "ANT_13", "ANT_14", "ANT_141", "ANT_151_FINAL", "ANT_152_FINAL", "ANT_153", "ANT_154", "ANT_15_FINAL", "ANT_160", "ANT_161", "ANT_162", "ANT_163", "ANT_164", "ANT_165", "ANT_170", "ANT_171", "ANT_180", "ANT_181");
-        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant";
-        String pathReportSmell = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/apache_1.1/Validated/Report_apache_1.1.csv";
-        String pathReportCompleto = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/apache_1.1/Validated/Export/";
-        String prefix = "ReportCompleto";
-        ReportGenerator.generaReportCompleto(pathReportSmell, projectDir, tag, pathReportCompleto, prefix);
-    }
+//    @Test
+//    public void testGeneraReportCompleto() throws Exception {
+//        List<String> tag = Arrays.asList("ANT_11", "ANT_12", "ANT_13", "ANT_14", "ANT_141", "ANT_151_FINAL", "ANT_152_FINAL", "ANT_153", "ANT_154", "ANT_15_FINAL", "ANT_160", "ANT_161", "ANT_162", "ANT_163", "ANT_164", "ANT_165", "ANT_170", "ANT_171", "ANT_180", "ANT_181");
+//        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant";
+//        String pathReportSmell = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/apache_1.1/Validated/Report_apache_1.1.csv";
+//        String pathReportCompleto = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/apache_1.1/Validated/Export/";
+//        String prefix = "ReportCompleto";
+//        ReportGenerator.generaReportCompleto(pathReportSmell, projectDir, tag, pathReportCompleto, prefix);
+//    }
 
     @Test
     public void testRecuperoCartelle() throws IOException {
@@ -123,7 +131,7 @@ public class TestSmell extends TestCase {
 
     @Test
     public void test2() throws Exception {
-        String log = GitCommand.log("ANT_11", "ANT_181", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant");
+        String log = GitCommand.logShaID("ANT_11", "ANT_181", "src/main/org/apache/tools/tar/TarConstants.java", "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant");
         List<String> commitList = Arrays.asList(log.trim().split("\n"));
         //int index = 0;
         System.setOut(new StorePrintStream(System.out));
@@ -144,10 +152,8 @@ public class TestSmell extends TestCase {
 
     @Test
     public void testGeneraReportAnt() throws Exception {
-        List<String> tag = Arrays.asList("ANT_11", "ANT_12", "ANT_13", "ANT_14", "ANT_141", "ANT_151_FINAL", "ANT_152_FINAL", "ANT_153", "ANT_154", "ANT_15_FINAL", "ANT_160", "ANT_161", "ANT_162", "ANT_163", "ANT_164", "ANT_165", "ANT_170", "ANT_171", "ANT_180", "ANT_181");
-        //String projectDir = "/Users/lorenzocarone/Dropbox (Personal)/TESI/Progetti Tesi/ant";
+        List<String> tag = Arrays.asList("ANT_11", "ANT_12", "ANT_13", "ANT_14", "ANT_141", "ANT_15_FINAL", "ANT_151_FINAL", "ANT_152_FINAL", "ANT_153", "ANT_154", "ANT_160", "ANT_161", "ANT_162", "ANT_163", "ANT_164", "ANT_170", "ANT_171", "ANT_180_RC1", "ANT_180", "ANT_181", "ANT_182", "ANT_183");
         String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant/src/main/";
-        //String folderPathProjectDataset = "/Users/lorenzocarone/Dropbox (Personal)/TESI/dataset/apache-ant-data/";
         String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ant-data/";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
@@ -163,11 +169,13 @@ public class TestSmell extends TestCase {
     @Test
     public void testGeneraReportGenerale() throws Exception {
         //INSERIRE L'ELENCO DEI TAG PER CUI SI VUOLE EFFETTUARE L'ANALISI
-        List<String> tag = Arrays.asList("release-0.7", "release-0.8", "release-0.9", "release-1.1", "release-1.2", "release-1.3", "release-1.4");
+        List<String> tag = Arrays.asList("0.10", "0.12", "0.14", "0.16", "0.18");
         //INSERIRE LA CARTELLA DEL PROGETTO DA ANALIZZARE
-        String projectDir = "//Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/nutch/src/java/";
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/qpid/qpid/tools/src/";
         //INSERIRE LA CARTELLA DEL DATASET DA CUI PRENDERE I DATI
-        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-nutch-data";
+        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-qpid-data";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
+
+
 }
