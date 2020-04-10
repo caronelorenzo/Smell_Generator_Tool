@@ -1,4 +1,4 @@
-package it.unibas.smell.modello;
+package it.unibas.smell.report;
 
 import com.opencsv.bean.CsvBindByName;
 
@@ -16,9 +16,9 @@ public class RowReportCompleto extends RowReportSmell {
     @CsvBindByName(column = "NEGATIVITY")
     private String negativity;
 
-    public RowReportCompleto(String smellType, String className, String packageString, String sha1, String commitMessage, String positivity, String negativity) {
+    public RowReportCompleto(String className, String packageString, String sha1, String commitMessage, String positivity, String negativity) {
         //Ho sostituito packageString con className invertendone l'ordine
-        super(smellType, packageString, className);
+        super(packageString, className);
         this.sha1 = sha1;
         this.commitMessage = commitMessage;
         this.positivity = positivity;

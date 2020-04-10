@@ -3,7 +3,7 @@ package it.unibas.smell.test;
 import it.unibas.smell.controllo.GitCommand;
 import it.unibas.smell.controllo.StorePrintStream;
 import it.unibas.smell.controllo.Utility;
-import it.unibas.smell.modello.RowReportSmell;
+import it.unibas.smell.report.RowReportSmell;
 import it.unibas.smell.workflow.ReportGenerator;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
@@ -176,6 +175,4 @@ public class TestSmell extends TestCase {
         String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-qpid-data";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
-
-
 }

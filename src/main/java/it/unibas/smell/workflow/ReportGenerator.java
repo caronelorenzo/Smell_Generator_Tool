@@ -3,10 +3,10 @@ package it.unibas.smell.workflow;
 import it.unibas.smell.controllo.GitCommand;
 import it.unibas.smell.controllo.StorePrintStream;
 import it.unibas.smell.controllo.Utility;
-import it.unibas.smell.modello.ReportSmell;
-import it.unibas.smell.modello.RowReportCompleto;
-import it.unibas.smell.modello.RowReportSmell;
-import it.unibas.smell.modello.smellType.SmellType;
+import it.unibas.smell.report.ReportSmell;
+import it.unibas.smell.report.RowReportCompleto;
+import it.unibas.smell.report.RowReportSmell;
+import it.unibas.smell.smellType.SmellType;
 import it.unibas.smell.persistence.DAOCsv;
 import it.unibas.smell.persistence.DAOException;
 import org.apache.commons.io.FileUtils;
@@ -34,8 +34,7 @@ public class ReportGenerator {
         String folderPathExport = folderPathProjectDataset.toString()+ "/Export_Report_Final";
         File file = new File(folderPathExport);
         boolean bool = file.mkdir();
-        //logger.debug("TAG SIZE: "+tag.size());
-        //logger.debug("DIRECTORY SIZE: "+directories.length);
+        directories = Arrays.stream(directories).filter(x -> !x.getName().equals("Export_Report_Final")).toArray(File[]::new);
         if (tag.size() != directories.length) {
             throw new IllegalArgumentException("I TAG NON CORRISPONDONO CON LA LISTA DELLE CARTELLE.");
         }
@@ -54,10 +53,10 @@ public class ReportGenerator {
 
     public static void generaReportCompleto(String pathReportSmell, String projectDir, String tagFrom, String tagTo, String folderPathExport, String prefix) throws Exception {
         List<RowReportCompleto> reportCompleto = new ArrayList<>();
-        List<RowReportSmell> reportSmell = DAOCsv.leggiCSV(RowReportSmell.class, pathReportSmell);
+        List<RowReportSmell> reportSmell = DAOCsv.leggiCSVReportSmell(pathReportSmell);
+        logger.debug(reportSmell.toString());
         System.setOut(new StorePrintStream(System.out));
         for (RowReportSmell rowReportSmell : reportSmell) {
-            String smellType = rowReportSmell.getSmellType();
             String packageString = rowReportSmell.getPackageString();
             String className = rowReportSmell.getClassString();
             Path classPath = Paths.get(packageToPath(packageString), className);
@@ -70,11 +69,11 @@ public class ReportGenerator {
                     String[] sentiStrenghtOutput = ReportGenerator.getSentiStrenghtOutput(message);
                     String positivity = sentiStrenghtOutput[0];
                     String negativity = sentiStrenghtOutput[1];
-                    RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, sha, message, positivity, negativity);
+                    RowReportCompleto rowReportCompleto = new RowReportCompleto(packageString, className, sha, message, positivity, negativity);
                     reportCompleto.add(rowReportCompleto);
                 }
             } else {
-                RowReportCompleto rowReportCompleto = new RowReportCompleto(smellType, packageString, className, "", "", "", "");
+                RowReportCompleto rowReportCompleto = new RowReportCompleto(packageString, className, "", "", "", "");
             }
         }
         String reportName = MessageFormat.format("{0}_{1}-{2}.csv", prefix, tagFrom, tagTo);
@@ -135,7 +134,7 @@ public class ReportGenerator {
                     smellRow.forEach(reportSmell::addSmellRow);
                 }
             }
-        } catch (DAOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return reportSmell;

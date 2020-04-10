@@ -19,4 +19,5 @@ dependencies {
     compile group: 'com.opencsv', name: 'opencsv', version: '5.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation fileTree(dir: '/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/SentiStrength-SE_V1.5.jar', include: ['*.jar'])
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
 }

@@ -1,8 +1,8 @@
-package it.unibas.smell.modello.smellType;
+package it.unibas.smell.smellType;
 
 import com.opencsv.bean.CsvBindByPosition;
 
-public class RefusedBequest implements SmellType, SmellTypeOdd {
+public class RefusedBequest implements SmellTypeOdd {
 
     private final String smellType = this.getClass().getSimpleName();
 
@@ -20,7 +20,7 @@ public class RefusedBequest implements SmellType, SmellTypeOdd {
 
     @Override
     public String getSmellType() {
-        return smellType;
+        return smellType.substring(0,1).toLowerCase() + smellType.substring(1);
     }
 
     @Override

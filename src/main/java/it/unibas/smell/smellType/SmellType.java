@@ -1,4 +1,4 @@
-package it.unibas.smell.modello.smellType;
+package it.unibas.smell.smellType;
 
 public interface SmellType {
 

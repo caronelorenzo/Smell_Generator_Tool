@@ -1,6 +1,7 @@
 package it.unibas.smell.workflow;
 
-import it.unibas.smell.modello.smellType.*;
+import it.unibas.smell.smellType.*;
+import it.unibas.smell.smellType.*;
 
 import java.util.AbstractMap;
 import java.util.Map;

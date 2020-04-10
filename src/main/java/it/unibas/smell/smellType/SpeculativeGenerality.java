@@ -1,8 +1,8 @@
-package it.unibas.smell.modello.smellType;
+package it.unibas.smell.smellType;
 
 import com.opencsv.bean.CsvBindByPosition;
 
-public class LargeClass  implements SmellType {
+public class SpeculativeGenerality implements SmellType {
 
     private final String smellType = this.getClass().getSimpleName();
 
@@ -14,7 +14,7 @@ public class LargeClass  implements SmellType {
 
     @Override
     public String getSmellType() {
-        return smellType;
+        return smellType.substring(0,1).toLowerCase() + smellType.substring(1);
     }
 
     @Override

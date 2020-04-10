@@ -1,21 +1,17 @@
 package it.unibas.smell.persistence;
 
-import com.opencsv.CSVWriter;
 import com.opencsv.ICSVWriter;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import it.unibas.smell.modello.RowReportSmell;
-import it.unibas.smell.modello.smellType.SmellType;
+import it.unibas.smell.report.RowReportSmell;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,6 +29,15 @@ public class DAOCsv {
                     .withType(t)
                     .build().parse();
         } catch (FileNotFoundException ex) {
+            throw new DAOException("Impossibile leggere il file " + filePath);
+        }
+    }
+
+    public static List<RowReportSmell> leggiCSVReportSmell(String filePath) throws DAOException {
+        try {
+            BufferedReader reader = Files.newBufferedReader(Paths.get(filePath));
+            return new CsvToBeanBuilder<RowReportSmell>(reader).withSeparator(';').withType(RowReportSmell.class).build().parse();
+        } catch (IOException ex) {
             throw new DAOException("Impossibile leggere il file " + filePath);
         }
     }

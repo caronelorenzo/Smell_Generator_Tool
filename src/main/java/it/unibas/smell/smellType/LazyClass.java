@@ -1,29 +1,18 @@
-package it.unibas.smell.modello.smellType;
+package it.unibas.smell.smellType;
 
-import com.opencsv.bean.CsvBindByPosition;
-
-public class ComplexClass implements SmellType {
+public class LazyClass  implements SmellType {
 
     private final String smellType = this.getClass().getSimpleName();
 
-    @CsvBindByPosition(position = 0, required = true)
+    //@CsvBindByPosition(position = 0, required = true)
     private String classString;
 
-    @CsvBindByPosition(position = 1, required = true)
+    //@CsvBindByPosition(position = 1, required = true)
     private String packageString;
 
     @Override
-    public String toString() {
-        return "ComplexClass{" +
-                "smellType='" + smellType + '\'' +
-                ", classString='" + classString + '\'' +
-                ", packageString='" + packageString + '\'' +
-                '}';
-    }
-
-    @Override
     public String getSmellType() {
-        return smellType;
+        return smellType.substring(0,1).toLowerCase() + smellType.substring(1);
     }
 
     @Override
