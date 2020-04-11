@@ -55,13 +55,14 @@ public class ReportGenerator {
     public static void generaReportCompleto(String pathReportSmell, String projectDir, String tagFrom, String tagTo, String folderPathExport, String prefix) throws Exception {
         List<RowReportCompleto> reportCompleto = new ArrayList<>();
         List<RowReportSmell> reportSmell = DAOCsv.leggiCSVReportSmell(pathReportSmell);
-        //logger.debug(reportSmell.toString());
         System.setOut(new StorePrintStream(System.out));
+        logger.debug("CLASSPATH11111: " + reportSmell.get(1).getClassString());
         for (RowReportSmell rowReportSmell : reportSmell) {
             String packageString = rowReportSmell.getPackageString();
             String className = rowReportSmell.getClassString();
             Path classPath = Paths.get(packageToPath(packageString), className);
             SmellCategories smellCategories = rowReportSmell.getSmellCategories();
+            logger.debug("CLASSPATH: " + classPath);
             String log = GitCommand.logShaID(tagFrom, tagTo, classPath.toString(), projectDir);
             if (!log.isEmpty()) {
                 List<String> commitList = Arrays.asList(log.trim().split("\n"));
@@ -80,7 +81,8 @@ public class ReportGenerator {
         }
         String reportName = MessageFormat.format("{0}_{1}-{2}.csv", prefix, tagFrom, tagTo);
         Path pathReportCompleto = Paths.get(folderPathExport, reportName);
-        DAOCsv.scriviCSVGenerico(pathReportCompleto.toString(), reportCompleto);
+        DAOCsv.createCsv(pathReportCompleto.toString(), reportCompleto, RowReportCompleto.class);
+        //DAOCsv.scriviCSVGenerico(pathReportCompleto.toString(), reportCompleto);
     }
 
     private static String[] getSentiStrenghtOutput(String message) {
@@ -118,7 +120,8 @@ public class ReportGenerator {
             ReportSmell reportSmell = generaReportSmell(folderPathValidated);
             reportSmell.addNonSmellyRow(rowComplete);
             Path pathReport = Paths.get(folderPathValidated, reportName);
-            DAOCsv.scriviCSVGenerico(pathReport.toString(), reportSmell.getReport());
+            //DAOCsv.scriviCSVGenerico(pathReport.toString(), reportSmell.getReport());
+            DAOCsv.createCsv(pathReport.toString(), reportSmell.getReport(), RowReportSmell.class);
         } catch (DAOException ex) {
             ex.printStackTrace();
         }
@@ -152,7 +155,7 @@ public class ReportGenerator {
     public static List<RowReportSmell> createRowComplete(List<File> files) {
         List<RowReportSmell> list = new ArrayList<>();
         for (File file : files) {
-            String className = file.getName();
+            String className = file.getName().trim();
             String packageName = getPackageString(file).replace("/" + className, "");
             String pathNameConvert = ReportGenerator.pathToPackage(packageName);
             RowReportSmell rowReportSmell = new RowReportSmell();

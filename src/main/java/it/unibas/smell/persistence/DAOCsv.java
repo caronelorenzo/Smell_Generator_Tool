@@ -1,10 +1,7 @@
 package it.unibas.smell.persistence;
 
 import com.opencsv.ICSVWriter;
-import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.bean.HeaderColumnNameMappingStrategy;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.bean.*;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import it.unibas.smell.report.RowReportSmell;
@@ -34,9 +31,16 @@ public class DAOCsv {
     }
 
     public static List<RowReportSmell> leggiCSVReportSmell(String filePath) throws DAOException {
+        CustomMappingStrategy<RowReportSmell> mappingStrategy = new CustomMappingStrategy<RowReportSmell>();
+        mappingStrategy.setType(RowReportSmell.class);
         try {
             BufferedReader reader = Files.newBufferedReader(Paths.get(filePath));
-            return new CsvToBeanBuilder<RowReportSmell>(reader).withSeparator(';').withType(RowReportSmell.class).build().parse();
+            return new CsvToBeanBuilder<RowReportSmell>(reader)
+                    .withSeparator(';')
+                    .withType(RowReportSmell.class)
+                    .withMappingStrategy(mappingStrategy)
+                    .withSkipLines(1)
+                    .build().parse();
         } catch (IOException ex) {
             throw new DAOException("Impossibile leggere il file " + filePath);
         }
@@ -47,7 +51,6 @@ public class DAOCsv {
         ICSVWriter csvWriter = null;
         try {
             writer = Files.newBufferedWriter(Paths.get(filename));
-            //TODO implementare mappingstrategy per ordinare le colonne in base all'indice
             StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer)
                     .withSeparator(';')
                     .build();
@@ -59,6 +62,43 @@ public class DAOCsv {
             e.printStackTrace();
         } catch (CsvDataTypeMismatchException e) {
             e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                }
+                if (csvWriter != null) {
+                    try {
+                        csvWriter.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+        }
+    }
+
+    public static <T> void createCsv(String filename, List<T> data, Class<T> beanClazz) throws DAOException {
+        CustomMappingStrategy<T> mappingStrategy = new CustomMappingStrategy<T>();
+        mappingStrategy.setType(beanClazz);
+        Writer writer = null;
+        ICSVWriter csvWriter = null;
+        String csv = "";
+        try {
+            writer = Files.newBufferedWriter(Paths.get(filename));
+            StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer)
+                    .withSeparator(';')
+                    .withMappingStrategy(mappingStrategy)
+                    .build();
+            sbc.write(data);
+            csv = writer.toString();
+        } catch (CsvRequiredFieldEmptyException e) {
+            // TODO add some logging...
+        } catch (CsvDataTypeMismatchException e) {
+            // TODO add some logging...
+        } catch (IOException e) {
+            logger.error(e.toString());
+            throw new DAOException("Impossibile scrivere il file ");
         } finally {
             if (writer != null) {
                 try {

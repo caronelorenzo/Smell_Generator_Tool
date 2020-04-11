@@ -1,46 +1,60 @@
 package it.unibas.smell.report;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
 
 public class SmellCategories {
 
     @CsvBindByName(column = "CLASS DATA SHOULD BE PRIVATE")
+    @CsvBindByPosition(position = 2)
     private String classDataShouldBePrivate;
 
     @CsvBindByName(column = "COMPLEX CLASS")
+    @CsvBindByPosition(position = 3)
     private String complexClass;
 
     @CsvBindByName(column = "FEATURE ENVY")
+    @CsvBindByPosition(position = 4)
     private String featureEnvy;
 
     @CsvBindByName(column = "INAPPROPRIATE INTIMACY")
+    @CsvBindByPosition(position = 5)
     private String inappropriateIntimacy;
 
     @CsvBindByName(column = "LARGE CLASS")
+    @CsvBindByPosition(position = 6)
     private String largeClass;
 
     @CsvBindByName(column = "LAZY CLASS")
+    @CsvBindByPosition(position = 7)
     private String lazyClass;
 
     @CsvBindByName(column = "LONG METHODS")
+    @CsvBindByPosition(position = 8)
     private String longMethods;
 
     @CsvBindByName(column = "LONG PARAMETER LIST")
+    @CsvBindByPosition(position = 9)
     private String longParameterList;
 
     @CsvBindByName(column = "MESSAGE CHAIN")
+    @CsvBindByPosition(position = 10)
     private String messageChain;
 
     @CsvBindByName(column = "MIDDLE MAN")
+    @CsvBindByPosition(position = 11)
     private String middleMan;
 
     @CsvBindByName(column = "REFUSED BEQUEST")
+    @CsvBindByPosition(position = 12)
     private String refusedBequest;
 
     @CsvBindByName(column = "SPAGHETTI CODE")
+    @CsvBindByPosition(position = 13)
     private String spaghettiCode;
 
     @CsvBindByName(column = "SPECULATIVE GENERALITY")
+    @CsvBindByPosition(position = 14)
     private String speculativeGenerality;
 
     public SmellCategories() {

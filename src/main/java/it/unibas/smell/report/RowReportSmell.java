@@ -1,9 +1,6 @@
 package it.unibas.smell.report;
 
-import com.opencsv.bean.CsvBindAndJoinByName;
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvCustomBindByName;
-import com.opencsv.bean.CsvRecurse;
+import com.opencsv.bean.*;
 import it.unibas.smell.smellType.SmellType;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -14,13 +11,12 @@ import java.util.Objects;
 
 public class RowReportSmell {
 
-//    @CsvBindByName(column = "SMELL TYPES")
-//    private String smellType;
-
     @CsvBindByName(column = "CLASS NAME")
+    @CsvBindByPosition(position = 0)
     private String classString;
 
     @CsvBindByName(column = "PACKAGE")
+    @CsvBindByPosition(position = 1)
     private String packageString;
 
     @CsvRecurse
