@@ -6,6 +6,7 @@ import it.unibas.smell.controllo.Utility;
 import it.unibas.smell.report.ReportSmell;
 import it.unibas.smell.report.RowReportCompleto;
 import it.unibas.smell.report.RowReportSmell;
+import it.unibas.smell.report.SmellCategories;
 import it.unibas.smell.smellType.SmellType;
 import it.unibas.smell.persistence.DAOCsv;
 import it.unibas.smell.persistence.DAOException;
@@ -54,12 +55,13 @@ public class ReportGenerator {
     public static void generaReportCompleto(String pathReportSmell, String projectDir, String tagFrom, String tagTo, String folderPathExport, String prefix) throws Exception {
         List<RowReportCompleto> reportCompleto = new ArrayList<>();
         List<RowReportSmell> reportSmell = DAOCsv.leggiCSVReportSmell(pathReportSmell);
-        logger.debug(reportSmell.toString());
+        //logger.debug(reportSmell.toString());
         System.setOut(new StorePrintStream(System.out));
         for (RowReportSmell rowReportSmell : reportSmell) {
             String packageString = rowReportSmell.getPackageString();
             String className = rowReportSmell.getClassString();
             Path classPath = Paths.get(packageToPath(packageString), className);
+            SmellCategories smellCategories = rowReportSmell.getSmellCategories();
             String log = GitCommand.logShaID(tagFrom, tagTo, classPath.toString(), projectDir);
             if (!log.isEmpty()) {
                 List<String> commitList = Arrays.asList(log.trim().split("\n"));
@@ -69,11 +71,11 @@ public class ReportGenerator {
                     String[] sentiStrenghtOutput = ReportGenerator.getSentiStrenghtOutput(message);
                     String positivity = sentiStrenghtOutput[0];
                     String negativity = sentiStrenghtOutput[1];
-                    RowReportCompleto rowReportCompleto = new RowReportCompleto(packageString, className, sha, message, positivity, negativity);
+                    RowReportCompleto rowReportCompleto = new RowReportCompleto(className, packageString, smellCategories, sha, message, positivity, negativity);
                     reportCompleto.add(rowReportCompleto);
                 }
             } else {
-                RowReportCompleto rowReportCompleto = new RowReportCompleto(packageString, className, "", "", "", "");
+                RowReportCompleto rowReportCompleto = new RowReportCompleto(className, packageString, smellCategories, "", "", "", "");
             }
         }
         String reportName = MessageFormat.format("{0}_{1}-{2}.csv", prefix, tagFrom, tagTo);

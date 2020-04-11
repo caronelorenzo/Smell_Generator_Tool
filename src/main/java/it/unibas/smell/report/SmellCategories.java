@@ -5,43 +5,43 @@ import com.opencsv.bean.CsvBindByName;
 public class SmellCategories {
 
     @CsvBindByName(column = "CLASS DATA SHOULD BE PRIVATE")
-    private String classDataShouldBePrivate = "NO";
+    private String classDataShouldBePrivate;
 
     @CsvBindByName(column = "COMPLEX CLASS")
-    private String complexClass = "NO";
+    private String complexClass;
 
     @CsvBindByName(column = "FEATURE ENVY")
-    private String featureEnvy = "NO";
+    private String featureEnvy;
 
     @CsvBindByName(column = "INAPPROPRIATE INTIMACY")
-    private String inappropriateIntimacy = "NO";
+    private String inappropriateIntimacy;
 
     @CsvBindByName(column = "LARGE CLASS")
-    private String largeClass = "NO";
+    private String largeClass;
 
     @CsvBindByName(column = "LAZY CLASS")
-    private String lazyClass = "NO";
+    private String lazyClass;
 
     @CsvBindByName(column = "LONG METHODS")
-    private String longMethods = "NO";
+    private String longMethods;
 
     @CsvBindByName(column = "LONG PARAMETER LIST")
-    private String longParameterList = "NO";
+    private String longParameterList;
 
     @CsvBindByName(column = "MESSAGE CHAIN")
-    private String messageChain = "NO";
+    private String messageChain;
 
     @CsvBindByName(column = "MIDDLE MAN")
-    private String middleMan = "NO";
+    private String middleMan;
 
     @CsvBindByName(column = "REFUSED BEQUEST")
-    private String refusedBequest = "NO";
+    private String refusedBequest;
 
     @CsvBindByName(column = "SPAGHETTI CODE")
-    private String spaghettiCode = "NO";
+    private String spaghettiCode;
 
     @CsvBindByName(column = "SPECULATIVE GENERALITY")
-    private String speculativeGenerality = "NO";
+    private String speculativeGenerality;
 
     public SmellCategories() {
     }

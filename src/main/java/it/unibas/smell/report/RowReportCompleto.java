@@ -16,9 +16,11 @@ public class RowReportCompleto extends RowReportSmell {
     @CsvBindByName(column = "NEGATIVITY")
     private String negativity;
 
-    public RowReportCompleto(String className, String packageString, String sha1, String commitMessage, String positivity, String negativity) {
+    public RowReportCompleto(String className, String packageString, SmellCategories smellCategories, String sha1, String commitMessage, String positivity, String negativity) {
         //Ho sostituito packageString con className invertendone l'ordine
-        super(packageString, className);
+        //super(packageString, className);
+        super(className, packageString);
+        super.setSmellCategories(smellCategories);
         this.sha1 = sha1;
         this.commitMessage = commitMessage;
         this.positivity = positivity;
