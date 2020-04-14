@@ -20,7 +20,7 @@ public class RowReportSmell {
     private String packageString;
 
     @CsvRecurse
-    private SmellCategories smellCategories;
+    private SmellCategories smellCategories = new SmellCategories();
 
     public RowReportSmell() {
     }

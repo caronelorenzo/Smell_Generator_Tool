@@ -22,8 +22,6 @@ public class RowReportCompleto extends RowReportSmell {
     private String negativity;
 
     public RowReportCompleto(String className, String packageString, SmellCategories smellCategories, String sha1, String commitMessage, String positivity, String negativity) {
-        //Ho sostituito packageString con className invertendone l'ordine
-        //super(packageString, className);
         super(className, packageString);
         super.setSmellCategories(smellCategories);
         this.sha1 = sha1;

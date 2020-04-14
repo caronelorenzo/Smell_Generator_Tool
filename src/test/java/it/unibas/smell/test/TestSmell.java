@@ -159,7 +159,7 @@ public class TestSmell extends TestCase {
 
     @Test
     public void testGeneraReportCassandra() throws Exception {
-        List<String> tag = Arrays.asList("cassandra-0.3.0-final", "cassandra-0.4.0-final", "cassandra-0.5.0", "cassandra-0.6.0", "cassandra-0.7.0", "cassandra-0.7.2", "cassandra-0.7.3", "cassandra-0.8.0", "cassandra-0.8.1", "cassandra-0.8.3", "cassandra-1.0.0", "cassandra-1.1.0");
+        List<String> tag = Arrays.asList("cassandra-0.3.0-rc3", "cassandra-0.3.0-final", "cassandra-0.4.0-final", "cassandra-0.5.0", "cassandra-0.6.0", "cassandra-0.7.0", "cassandra-0.7.2", "cassandra-0.7.3", "cassandra-0.8.0", "cassandra-0.8.1", "cassandra-0.8.3", "cassandra-1.0.0", "cassandra-1.1.0");
         String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/cassandra/src/java/";
         String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-cassandra";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);

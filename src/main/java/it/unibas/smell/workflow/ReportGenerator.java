@@ -56,19 +56,18 @@ public class ReportGenerator {
         List<RowReportCompleto> reportCompleto = new ArrayList<>();
         List<RowReportSmell> reportSmell = DAOCsv.leggiCSVReportSmell(pathReportSmell);
         System.setOut(new StorePrintStream(System.out));
-        //logger.debug("CLASSPATH11111: " + reportSmell.get(1).getClassString());
         for (RowReportSmell rowReportSmell : reportSmell) {
             String packageString = rowReportSmell.getPackageString();
             String className = rowReportSmell.getClassString();
             Path classPath = Paths.get(packageToPath(packageString), className);
             SmellCategories smellCategories = rowReportSmell.getSmellCategories();
-            //logger.debug("CLASSPATH: " + classPath);
             String log = GitCommand.logShaID(tagFrom, tagTo, classPath.toString(), projectDir);
             if (!log.isEmpty()) {
                 List<String> commitList = Arrays.asList(log.trim().split("\n"));
                 for (String commit : commitList) {
                     String sha = Utility.matchSHA1(commit).trim();
                     String message = GitCommand.logMessage(sha, projectDir);
+                    //logger.debug("MESSAGE: " + message);
                     String[] sentiStrenghtOutput = ReportGenerator.getSentiStrenghtOutput(message);
                     String positivity = sentiStrenghtOutput[0];
                     String negativity = sentiStrenghtOutput[1];

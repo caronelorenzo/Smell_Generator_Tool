@@ -7,55 +7,55 @@ public class SmellCategories {
 
     @CsvBindByName(column = "CLASS DATA SHOULD BE PRIVATE")
     @CsvBindByPosition(position = 2)
-    private String classDataShouldBePrivate;
+    private String classDataShouldBePrivate = "NO";
 
     @CsvBindByName(column = "COMPLEX CLASS")
     @CsvBindByPosition(position = 3)
-    private String complexClass;
+    private String complexClass = "NO";
 
     @CsvBindByName(column = "FEATURE ENVY")
     @CsvBindByPosition(position = 4)
-    private String featureEnvy;
+    private String featureEnvy = "NO";
 
     @CsvBindByName(column = "INAPPROPRIATE INTIMACY")
     @CsvBindByPosition(position = 5)
-    private String inappropriateIntimacy;
+    private String inappropriateIntimacy = "NO";
 
     @CsvBindByName(column = "LARGE CLASS")
     @CsvBindByPosition(position = 6)
-    private String largeClass;
+    private String largeClass = "NO";
 
     @CsvBindByName(column = "LAZY CLASS")
     @CsvBindByPosition(position = 7)
-    private String lazyClass;
+    private String lazyClass = "NO";
 
     @CsvBindByName(column = "LONG METHODS")
     @CsvBindByPosition(position = 8)
-    private String longMethods;
+    private String longMethods = "NO";
 
     @CsvBindByName(column = "LONG PARAMETER LIST")
     @CsvBindByPosition(position = 9)
-    private String longParameterList;
+    private String longParameterList = "NO";
 
     @CsvBindByName(column = "MESSAGE CHAIN")
     @CsvBindByPosition(position = 10)
-    private String messageChain;
+    private String messageChain = "NO";
 
     @CsvBindByName(column = "MIDDLE MAN")
     @CsvBindByPosition(position = 11)
-    private String middleMan;
+    private String middleMan = "NO";
 
     @CsvBindByName(column = "REFUSED BEQUEST")
     @CsvBindByPosition(position = 12)
-    private String refusedBequest;
+    private String refusedBequest = "NO";
 
     @CsvBindByName(column = "SPAGHETTI CODE")
     @CsvBindByPosition(position = 13)
-    private String spaghettiCode;
+    private String spaghettiCode = "NO";
 
     @CsvBindByName(column = "SPECULATIVE GENERALITY")
     @CsvBindByPosition(position = 14)
-    private String speculativeGenerality;
+    private String speculativeGenerality = "NO";
 
     public SmellCategories() {
     }

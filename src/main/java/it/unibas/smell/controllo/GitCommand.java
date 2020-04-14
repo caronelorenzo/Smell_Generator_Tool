@@ -71,10 +71,7 @@ public class GitCommand {
     //RITORNA IL MESSAGE DATO IN INPUT LO SHA ID
     public static String logMessage(String shaId, String projectDir) throws Exception {
         //Restituisce il messaggio dal commit richiesto con lo SHA
-        //git show -s --format=%B {0} | tr -d ''\n''
-        //String cmd1 = MessageFormat.format("git log --pretty=format:'%s%B' -n 1 {0} | tr -d ''\\n'''", shaId);
-        String cmd1 = MessageFormat.format("git log --pretty=format:'%s%B' -n 1 {0}", shaId);
-        //logger.debug(cmd1);
+        String cmd1 = MessageFormat.format("git log --pretty=format:'%B' -n 1 {0}", shaId);
         File destDir = new File(projectDir);
         return execCommandMessage(cmd1, destDir);
     }
@@ -90,7 +87,7 @@ public class GitCommand {
                 try {
                     while ((line = reader.readLine()) != null) {
                         byte[] b = line.getBytes("UTF-8");
-                        line = new String(b, "UTF-8").replace("\n", " ");
+                        line = new String(b, "UTF-8").replace("\n", " ") + " ";
                         builder.append(line);
                     }
                 } catch (IOException e) {
@@ -123,5 +120,4 @@ public class GitCommand {
         //logger.debug("Fine");
         return builder.toString();
     }
-
 }
