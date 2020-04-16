@@ -55,8 +55,9 @@ public class RowReportScore extends RowReportSmell {
         if (commitScore.isNegative()) {
             numNegativeCommit = numNegativeCommit + 1;
         }
-
-        numNonNeutralCommit = commitScoreList.size() - numNeutralCommit;
+        if (commitScore.isNonNeutral()) {
+            numNonNeutralCommit = commitScoreList.size() - numNeutralCommit;
+        }
         score = ((float) numNonNeutralCommit) / commitScoreList.size();
     }
 
