@@ -1,19 +1,13 @@
 package it.unibas.smell.workflow;
 
-import it.unibas.smell.controllo.GitCommand;
-import it.unibas.smell.controllo.StorePrintStream;
 import it.unibas.smell.controllo.Utility;
-import it.unibas.smell.report.ReportSmell;
-import it.unibas.smell.report.RowReportCompleto;
-import it.unibas.smell.report.RowReportSmell;
-import it.unibas.smell.report.SmellCategories;
+import it.unibas.smell.report.*;
 import it.unibas.smell.smellType.SmellType;
 import it.unibas.smell.persistence.DAOCsv;
 import it.unibas.smell.persistence.DAOException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.wlv.sentistrength.SentiStrength;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,50 +39,29 @@ public class ReportGenerator {
             String tagTo = tag.get(i+1);
             String version = directory.getName();
             String folderPathValidated = directory.getPath().toString() + "/Validated/";
-            String reportName = "Report_" + version + ".csv";
-            generaReportSmell(folderPathValidated, reportName, projectDir);
-            generaReportCompleto(folderPathValidated + reportName, projectDir, tagFrom, tagTo, folderPathExport, version.replace(".", "-"));
-            //break;
-        }
-    }
-
-    public static void generaReportCompleto(String pathReportSmell, String projectDir, String tagFrom, String tagTo, String folderPathExport, String prefix) throws Exception {
-        List<RowReportCompleto> reportCompleto = new ArrayList<>();
-        List<RowReportSmell> reportSmell = DAOCsv.leggiCSVReportSmell(pathReportSmell);
-        System.setOut(new StorePrintStream(System.out));
-        for (RowReportSmell rowReportSmell : reportSmell) {
-            String packageString = rowReportSmell.getPackageString();
-            String className = rowReportSmell.getClassString();
-            Path classPath = Paths.get(packageToPath(packageString), className);
-            SmellCategories smellCategories = rowReportSmell.getSmellCategories();
-            String log = GitCommand.logShaID(tagFrom, tagTo, classPath.toString(), projectDir);
-            if (!log.isEmpty()) {
-                List<String> commitList = Arrays.asList(log.trim().split("\n"));
-                for (String commit : commitList) {
-                    String sha = Utility.matchSHA1(commit).trim();
-                    String message = GitCommand.logMessage(sha, projectDir);
-                    //logger.debug("MESSAGE: " + message);
-                    String[] sentiStrenghtOutput = ReportGenerator.getSentiStrenghtOutput(message);
-                    String positivity = sentiStrenghtOutput[0];
-                    String negativity = sentiStrenghtOutput[1];
-                    RowReportCompleto rowReportCompleto = new RowReportCompleto(className, packageString, smellCategories, sha, message, positivity, negativity);
-                    reportCompleto.add(rowReportCompleto);
-                }
-            } else {
-                RowReportCompleto rowReportCompleto = new RowReportCompleto(className, packageString, smellCategories, "", "", "", "");
+            String reportNameSmell = "Report_" + version + ".csv";
+            String reportNameCompleto = "ReportCompleto_" + version + ".csv";
+            String reportNameScore = "ReportScore_" + version + ".csv";
+            generaReportSmell(folderPathValidated, reportNameSmell, projectDir);
+            generaReportCompleto(folderPathValidated + reportNameSmell, projectDir, tagFrom, tagTo, folderPathExport, reportNameCompleto, reportNameScore);
+            if (i == 1) {
+                break;
             }
         }
-        String reportName = MessageFormat.format("{0}_{1}-{2}.csv", prefix, tagFrom, tagTo);
-        Path pathReportCompleto = Paths.get(folderPathExport, reportName);
-        DAOCsv.createCsv(pathReportCompleto.toString(), reportCompleto, RowReportCompleto.class);
-        //DAOCsv.scriviCSVGenerico(pathReportCompleto.toString(), reportCompleto);
     }
 
-    private static String[] getSentiStrenghtOutput(String message) {
-        String ssthInitialisationAndText[] = {"sentidata", "/Users/lorenzocarone/Google Drive/TESI/SentiStrength-SE_v1.5/ConfigFiles", "text", message};
-        SentiStrength.main(ssthInitialisationAndText);
-        String s = StorePrintStream.printList.get(StorePrintStream.printList.size()-1);
-        return s.trim().split(" ");
+    public static void generaReportCompleto(String pathReportSmell, String projectDir, String tagFrom, String tagTo, String folderPathExport, String nomeReportCompleto, String nomeReportScore) throws Exception {
+        List<RowReportSmell> reportSmell = DAOCsv.leggiCSVReportSmell(pathReportSmell);
+        ReportCompleto reportCompleto = new ReportCompleto();
+        reportCompleto.createReport(reportSmell, tagFrom, tagTo, projectDir);
+        ReportScore reportScore = new ReportScore();
+        reportScore.createReport(reportCompleto.getReport());
+        String reportNameCompleto = MessageFormat.format("{0}_{1}-{2}.csv", nomeReportCompleto, tagFrom, tagTo);
+        Path pathReportCompleto = Paths.get(folderPathExport, reportNameCompleto);
+        String reportNameScore = MessageFormat.format("{0}_{1}-{2}.csv", nomeReportScore, tagFrom, tagTo);
+        Path pathReportScore = Paths.get(folderPathExport, reportNameScore);
+        DAOCsv.createCsv(pathReportCompleto.toString(), reportCompleto.getReport(), RowReportCompleto.class);
+        DAOCsv.createCsv(pathReportScore.toString(), reportScore.getReport(), RowReportScore.class);
     }
 
     private static void makeExportFolder(String datasetSource) {
@@ -100,16 +73,6 @@ public class ReportGenerator {
         } else {
             logger.debug("Sorry couldn’t create specified directory");
         }
-    }
-
-    private static String packageToPath(String packageString) {
-        String replace = packageString.replace(".", "/");
-        return replace;
-    }
-
-    private static String pathToPackage(String pathString) {
-        String replace = pathString.replace("/", ".");
-        return replace;
     }
 
     public static void generaReportSmell(String folderPathValidated, String reportName, String allProjectFolderPath) {
@@ -156,7 +119,7 @@ public class ReportGenerator {
         for (File file : files) {
             String className = file.getName().trim();
             String packageName = getPackageString(file).replace("/" + className, "");
-            String pathNameConvert = ReportGenerator.pathToPackage(packageName);
+            String pathNameConvert = Utility.pathToPackage(packageName);
             RowReportSmell rowReportSmell = new RowReportSmell();
             rowReportSmell.setClassString(className);
             rowReportSmell.setPackageString(pathNameConvert);

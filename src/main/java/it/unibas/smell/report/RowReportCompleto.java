@@ -2,6 +2,7 @@ package it.unibas.smell.report;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
+import com.opencsv.bean.CsvRecurse;
 
 
 public class RowReportCompleto extends RowReportSmell {
@@ -13,21 +14,15 @@ public class RowReportCompleto extends RowReportSmell {
     @CsvBindByPosition(position = 16)
     private String commitMessage;
 
-    @CsvBindByName(column = "POSITIVITY")
-    @CsvBindByPosition(position = 17)
-    private String positivity;
+    @CsvRecurse
+    private CommitScore commitScore;
 
-    @CsvBindByName(column = "NEGATIVITY")
-    @CsvBindByPosition(position = 18)
-    private String negativity;
-
-    public RowReportCompleto(String className, String packageString, SmellCategories smellCategories, String sha1, String commitMessage, String positivity, String negativity) {
+    public RowReportCompleto(String className, String packageString, SmellCategories smellCategories, String sha1, String commitMessage, CommitScore commitScore) {
         super(className, packageString);
         super.setSmellCategories(smellCategories);
         this.sha1 = sha1;
         this.commitMessage = commitMessage;
-        this.positivity = positivity;
-        this.negativity = negativity;
+        this.commitScore = commitScore;
     }
 
     public String getCommitMessage() {
@@ -38,27 +33,19 @@ public class RowReportCompleto extends RowReportSmell {
         this.commitMessage = commitMessage;
     }
 
-    public String getPositivity() {
-        return positivity;
-    }
-
-    public void setPositivity(String positivity) {
-        this.positivity = positivity;
-    }
-
-    public String getNegativity() {
-        return negativity;
-    }
-
-    public void setNegativity(String negativity) {
-        this.negativity = negativity;
-    }
-
     public String getSha1() {
         return sha1;
     }
 
     public void setSha1(String sha1) {
         this.sha1 = sha1;
+    }
+
+    public CommitScore getCommitScore() {
+        return commitScore;
+    }
+
+    public void setCommitScore(CommitScore commitScore) {
+        this.commitScore = commitScore;
     }
 }

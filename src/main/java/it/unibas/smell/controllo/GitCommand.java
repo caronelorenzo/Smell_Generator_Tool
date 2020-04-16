@@ -16,12 +16,12 @@ public class GitCommand {
 
     //RITORNA LO SHAID
     public static String logShaID(String tagFrom, String tagTo, String classPath, String projectDir) throws Exception {
-        //COMANDO ATTUALMENTE FUNZIONANTE MA CHE TRONCA LA FINE DEL MESSAGGIO
         String cmd = MessageFormat.format( "git log --pretty=oneline {0}...{1} --follow -- {2}", tagFrom, tagTo, classPath);
         //logger.debug("GIT COMMAND: " + cmd);
         File destDir = new File(projectDir);
         return execCommand(cmd, destDir);
     }
+
     //RITORNA LO SHAID
     public static String execCommand(String cmd, File destDir) throws Exception {
         Process process = Runtime.getRuntime().exec(cmd, null, destDir);

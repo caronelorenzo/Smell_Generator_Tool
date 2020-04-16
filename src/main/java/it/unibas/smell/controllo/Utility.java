@@ -43,4 +43,14 @@ public class Utility {
         return cmdString;
     }
 
+    public static String packageToPath(String packageString) {
+        String replace = packageString.replace(".", "/");
+        return replace;
+    }
+
+    public static String pathToPackage(String pathString) {
+        String replace = pathString.replace("/", ".");
+        return replace;
+    }
+
 }
