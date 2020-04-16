@@ -53,8 +53,8 @@ public class ReportGenerator {
     public static void generaReportCompleto(String pathReportSmell, String projectDir, String tagFrom, String tagTo, String folderPathExport, String nomeReportCompleto, String nomeReportScore) throws Exception {
         List<RowReportSmell> reportSmell = DAOCsv.leggiCSVReportSmell(pathReportSmell);
         ReportCompleto reportCompleto = new ReportCompleto();
-        reportCompleto.createReport(reportSmell, tagFrom, tagTo, projectDir);
         ReportScore reportScore = new ReportScore();
+        reportCompleto.createReport(reportSmell, tagFrom, tagTo, projectDir);
         reportScore.createReport(reportCompleto.getReport());
         String reportNameCompleto = MessageFormat.format("{0}_{1}-{2}.csv", nomeReportCompleto, tagFrom, tagTo);
         Path pathReportCompleto = Paths.get(folderPathExport, reportNameCompleto);

@@ -27,6 +27,8 @@ public class CommitScore {
         return positivity + negativity > 0;
     }
 
+    public boolean isNegative() { return positivity + negativity < 0; }
+
     public boolean isNeutral() {
         return positivity == 1 && negativity == -1;
     }

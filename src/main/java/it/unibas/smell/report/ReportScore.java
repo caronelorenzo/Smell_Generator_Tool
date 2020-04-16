@@ -17,13 +17,21 @@ public class ReportScore {
     public void createReport(List<RowReportCompleto> rowReportCompletoList) {
         for (RowReportCompleto rowReportCompleto : rowReportCompletoList) {
             RowReportSmell rowReportSmell = (RowReportSmell) rowReportCompleto;
-            RowReportScore rowReportScore = null;
-            if (report.containsKey(rowReportSmell)) {
-                rowReportScore = report.get(rowReportSmell);
-                rowReportScore.addCommitScore(rowReportCompleto.getCommitScore());
-            } else {
-                report.put(rowReportSmell, new RowReportScore(rowReportSmell));
+            RowReportScore rowReportScore = report.get(rowReportSmell);
+            if (rowReportScore == null) {
+                rowReportScore = new RowReportScore(rowReportSmell);
+                report.put(rowReportSmell, rowReportScore);
             }
+            rowReportScore.addCommitScore(rowReportCompleto.getCommitScore());
+
+//            if (report.containsKey(rowReportSmell)) {
+//                rowReportScore = report.get(rowReportSmell);
+//                rowReportScore.addCommitScore(rowReportCompleto.getCommitScore());
+//            } else {
+//                rowReportScore = new RowReportScore(rowReportSmell);
+//                rowReportScore.addCommitScore(rowReportCompleto.getCommitScore());
+//                report.put(rowReportSmell, rowReportScore);
+//            }
         }
     }
 

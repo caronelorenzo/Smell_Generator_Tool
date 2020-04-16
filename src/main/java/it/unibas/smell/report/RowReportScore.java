@@ -3,6 +3,8 @@ package it.unibas.smell.report;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +46,16 @@ public class RowReportScore extends RowReportSmell {
     }
 
     private void updateScore(CommitScore commitScore) {
-        if (commitScore.isPositive()) {
-            numPositiveCommit = numPositiveCommit + 1;
-        }  else {
-            //IN QUESTO CASO AGGIUNGE ANCHE I COMMIT SCORE CON SOMMA 0
-            numNegativeCommit = numNegativeCommit + 1;
-        }
         if (commitScore.isNeutral()) {
             numNeutralCommit = numNeutralCommit + 1;
         }
+        if (commitScore.isPositive()) {
+            numPositiveCommit = numPositiveCommit + 1;
+        }
+        if (commitScore.isNegative()) {
+            numNegativeCommit = numNegativeCommit + 1;
+        }
+
         numNonNeutralCommit = commitScoreList.size() - numNeutralCommit;
         score = ((float) numNonNeutralCommit) / commitScoreList.size();
     }
