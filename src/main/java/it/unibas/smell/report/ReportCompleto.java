@@ -42,10 +42,10 @@ public class ReportCompleto {
                         report.add(rowReportCompleto);
                     }
                 }
-//                else {
-//                    rowReportCompleto = new RowReportCompleto(className, packageString, smellCategories, "", "", new CommitScore());
-//                    report.add(rowReportCompleto);
-//                }
+                else {
+                    rowReportCompleto = new RowReportCompleto(className, packageString, smellCategories, "", "", new CommitScore());
+                    report.add(rowReportCompleto);
+                }
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }

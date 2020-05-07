@@ -12,24 +12,36 @@ import java.util.Objects;
 
 public class RowReportScore extends RowReportSmell {
 
-    @CsvBindByName(column = "#POSITIVE-COMMIT")
+    @CsvBindByName(column = "SMELLY")
     @CsvBindByPosition(position = 15)
+    private String smelly = "NO";
+
+    @CsvBindByName(column = "CHANGED")
+    @CsvBindByPosition(position = 16)
+    private String changed = "NO";
+
+    @CsvBindByName(column = "#POSITIVE-COMMIT")
+    @CsvBindByPosition(position = 17)
     private int numPositiveCommit = 0;
 
     @CsvBindByName(column = "#NEGATIVE-COMMIT")
-    @CsvBindByPosition(position = 16)
+    @CsvBindByPosition(position = 18)
     private int numNegativeCommit = 0;
 
     @CsvBindByName(column = "#NEUTRAL-COMMIT")
-    @CsvBindByPosition(position = 17)
+    @CsvBindByPosition(position = 19)
     private int numNeutralCommit = 0;
 
     @CsvBindByName(column = "#NON-NEUTRAL-COMMIT")
-    @CsvBindByPosition(position = 18)
+    @CsvBindByPosition(position = 20)
     private int numNonNeutralCommit = 0;
 
+    @CsvBindByName(column = "#MIXED-COMMIT")
+    @CsvBindByPosition(position = 21)
+    private int numMixedCommit = 0;
+
     @CsvBindByName(column = "SCORE")
-    @CsvBindByPosition(position = 19)
+    @CsvBindByPosition(position = 22)
     private float score = 0f;
 
     @CsvIgnore
@@ -46,6 +58,12 @@ public class RowReportScore extends RowReportSmell {
     }
 
     private void updateScore(CommitScore commitScore) {
+        if (getSmellCategories().isSmelly()) {
+            smelly = "YES";
+        }
+        if (commitScore.getNegativity() != 0 || commitScore.getPositivity() != 0) {
+            changed = "YES";
+        }
         if (commitScore.isNeutral()) {
             numNeutralCommit = numNeutralCommit + 1;
         }
@@ -58,7 +76,34 @@ public class RowReportScore extends RowReportSmell {
         if (commitScore.isNonNeutral()) {
             numNonNeutralCommit = commitScoreList.size() - numNeutralCommit;
         }
+        if (commitScore.isMixed()) {
+            numMixedCommit = numMixedCommit + 1;
+        }
         score = ((float) numNonNeutralCommit) / commitScoreList.size();
+    }
+
+    public String getSmelly() {
+        return smelly;
+    }
+
+    public void setSmelly(String smelly) {
+        this.smelly = smelly;
+    }
+
+    public String getChanged() {
+        return changed;
+    }
+
+    public void setChanged(String changed) {
+        this.changed = changed;
+    }
+
+    public int getNumMixedCommit() {
+        return numMixedCommit;
+    }
+
+    public void setNumMixedCommit(int numMixedCommit) {
+        this.numMixedCommit = numMixedCommit;
     }
 
     public int getNumPositiveCommit() {

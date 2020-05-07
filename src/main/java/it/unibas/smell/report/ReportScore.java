@@ -23,15 +23,6 @@ public class ReportScore {
                 report.put(rowReportSmell, rowReportScore);
             }
             rowReportScore.addCommitScore(rowReportCompleto.getCommitScore());
-
-//            if (report.containsKey(rowReportSmell)) {
-//                rowReportScore = report.get(rowReportSmell);
-//                rowReportScore.addCommitScore(rowReportCompleto.getCommitScore());
-//            } else {
-//                rowReportScore = new RowReportScore(rowReportSmell);
-//                rowReportScore.addCommitScore(rowReportCompleto.getCommitScore());
-//                report.put(rowReportSmell, rowReportScore);
-//            }
         }
     }
 

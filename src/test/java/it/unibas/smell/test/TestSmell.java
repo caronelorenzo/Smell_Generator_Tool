@@ -159,9 +159,33 @@ public class TestSmell extends TestCase {
 
     @Test
     public void testGeneraReportCassandra() throws Exception {
-        List<String> tag = Arrays.asList("cassandra-0.3.0-rc3", "cassandra-0.3.0-final", "cassandra-0.4.0-final", "cassandra-0.5.0", "cassandra-0.6.0", "cassandra-0.7.0", "cassandra-0.7.2", "cassandra-0.7.3", "cassandra-0.8.0", "cassandra-0.8.1", "cassandra-0.8.3", "cassandra-1.0.0", "cassandra-1.1.0");
+        List<String> tag = Arrays.asList("cassandra-0.3.0-final", "cassandra-0.4.0-final", "cassandra-0.5.0", "cassandra-0.6.0", "cassandra-0.7.0", "cassandra-0.7.2", "cassandra-0.7.3", "cassandra-0.8.0", "cassandra-0.8.1", "cassandra-0.8.3", "cassandra-1.0.0", "cassandra-1.1.0");
         String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/cassandra/src/java/";
         String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-cassandra";
+        ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
+    }
+
+    @Test
+    public void testGeneraReportIvy() throws Exception {
+        List<String> tag = Arrays.asList("2.0.0-alpha1", "2.0.0-alpha2", "2.0.0-beta1", "2.0.0-beta2", "2.0.0-rc1", "2.0.0-rc2",  "2.0.0",  "2.1.0-rc2", "2.1.0");
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/ant-ivy/src/java";
+        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-ivy-data";
+        ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
+    }
+
+    @Test
+    public void testGeneraReportNutch() throws Exception {
+        List<String> tag = Arrays.asList("release-0.7", "release-0.8", "release-0.9", "release-1.1", "release-1.2", "release-1.3",  "release-1.4");
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/nutch/src/java";
+        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-nutch-data";
+        ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
+    }
+
+    @Test
+    public void testGeneraReportXerces() throws Exception {
+        List<String> tag = Arrays.asList("Xerces-J_1_0_1", "Xerces-J_1_0_4", "Xerces-J_1_2_0", "Xerces-J_1_2_1", "Xerces-J_1_2_2", "Xerces-J_1_2_3",  "Xerces-J_1_3_0",  "Xerces-J_1_3_1",  "Xerces-J_1_4_0",  "Xerces-J_1_4_1",  "Xerces-J_1_4_2",  "Xerces-J_1_4_4",  "Xerces-J_2_0_0",  "Xerces-J_2_1_0",  "Xerces-J_2_2_0",  "Xerces-J_2_3_0");
+        String projectDir = "/Users/lorenzocarone/Google Drive/TESI/Progetti Tesi/xerces2-j/src";
+        String folderPathProjectDataset = "/Users/lorenzocarone/Google Drive/TESI/dataset/apache-xerces-data";
         ReportGenerator.generaReportCompletoPerVersione(projectDir, tag, folderPathProjectDataset);
     }
 

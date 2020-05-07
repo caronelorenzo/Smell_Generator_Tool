@@ -60,6 +60,22 @@ public class SmellCategories {
     public SmellCategories() {
     }
 
+    public boolean isSmelly () {
+        return (classDataShouldBePrivate.contains("YES") ||
+                complexClass.contains("YES") ||
+                featureEnvy.contains("YES") ||
+                inappropriateIntimacy.contains("YES") ||
+                largeClass.contains("YES") ||
+                lazyClass.contains("YES") ||
+                longMethods.contains("YES") ||
+                longParameterList.contains("YES") ||
+                messageChain.contains("YES") ||
+                middleMan.contains("YES") ||
+                refusedBequest.contains("YES") ||
+                spaghettiCode.contains("YES") ||
+                speculativeGenerality.contains("YES"));
+    }
+
     public String getClassDataShouldBePrivate() {
         return classDataShouldBePrivate;
     }

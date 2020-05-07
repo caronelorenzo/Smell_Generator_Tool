@@ -44,9 +44,9 @@ public class ReportGenerator {
             String reportNameScore = "ReportScore_" + version + ".csv";
             generaReportSmell(folderPathValidated, reportNameSmell, projectDir);
             generaReportCompleto(folderPathValidated + reportNameSmell, projectDir, tagFrom, tagTo, folderPathExport, reportNameCompleto, reportNameScore);
-            if (i == 1) {
-                break;
-            }
+//            if (i == 1) {
+//                break;
+//            }
         }
     }
 

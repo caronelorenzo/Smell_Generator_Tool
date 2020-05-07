@@ -23,30 +23,15 @@ public class CommitScore {
         this.negativity = negativity;
     }
 
-    public boolean isPositive() {
-        return positivity > 1;
-    }
+    public boolean isPositive() { return positivity > 1; }
 
     public boolean isNegative() { return negativity < -1; }
 
-    public boolean isNeutral() {
-        return positivity == 1 && negativity == -1;
-    }
+    public boolean isNeutral() { return positivity == 1 && negativity == -1; }
 
-    public boolean isNonNeutral() {
-        return positivity > 1 || negativity < -1;
-    }
+    public boolean isNonNeutral() { return positivity > 1 || negativity < -1; }
 
-//    OLD
-//    public boolean isPositive() {
-//        return positivity + negativity > 0;
-//    }
-//
-//    public boolean isNegative() { return positivity + negativity < 0; }
-//
-//    public boolean isNeutral() {
-//        return positivity == 1 && negativity == -1;
-//    }
+    public boolean isMixed() { return positivity > 1 && negativity < -1; }
 
     public int getPositivity() {
         return positivity;
